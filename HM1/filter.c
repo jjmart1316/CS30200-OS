@@ -1,6 +1,5 @@
 /*
  * Course: CS 30200
- * Name: Juan J Martinez
  * Assignment: 1
  * */
 
