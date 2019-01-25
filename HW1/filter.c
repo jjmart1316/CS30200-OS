@@ -1,6 +1,5 @@
 /*
  * Course: CS 30200
- * Name: Juan J Martinez
  * Assignment: 1
  * */
 
@@ -16,7 +15,7 @@ int main(int argc, char* argv[]) {
     int columns = 3; //3 = default value
 
     //Overrides default precision and columns with values from a configuration file (if it exist)
-    FILE * fp;
+    FILE *fp;
     int line1, line2;
     if( (fp = fopen("filter.cfg", "r")) != NULL) {
         fscanf(fp, "%d %d", &line1, &line2);
