@@ -1,12 +1,13 @@
 /*
  * Course: CS 30200
+ * Name: Juan J Martinez
  * Assignment: 1
  * */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define WIDTH 4 // 4 = default value (width for values less than 10,000)
+#define WIDTH 4 // 4 = width for values less than 10,000
 #define PERIOD 1
 
 int main(int argc, char* argv[]) {
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
         columns = atoi(ENV_COLUMN);
     }
 
-    //Command Line argument for precision format
+    //Command Line argument for precision and column format
     if (argc > 2) {
         precision = atoi(argv[1]);
         columns = atoi(argv[2]);
@@ -43,13 +44,13 @@ int main(int argc, char* argv[]) {
     }
 
     //adjustedWidth = width ( + precision + decimal point if precision is > 0)
-    const int ADJUSTED_WIDTH = precision > 0 ? WIDTH + PERIOD + precision : WIDTH;
+    const int TOTAL_WIDTH = precision > 0 ? WIDTH + PERIOD + precision : WIDTH;
 
     //process the stream of input numbers
     double streamInput;
     int loopCounter = 1;
     while( scanf(" %lf", &streamInput) != EOF) {
-        printf("%*.*f  ", ADJUSTED_WIDTH, precision, streamInput);
+        printf("%*.*f  ", TOTAL_WIDTH, precision, streamInput);
         if ( (loopCounter % columns) == 0 ) {
             printf("\n");
         }
@@ -58,4 +59,4 @@ int main(int argc, char* argv[]) {
 
     printf("\n");
     return 0;
-}
+
