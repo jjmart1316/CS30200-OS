@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #define WIDTH 4 // 4 = default value (width for values less than 10,000)
+#define PERIOD 1
 
 int main(int argc, char* argv[]) {
 
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]) {
     }
 
     //adjustedWidth = width ( + precision + decimal point if precision is > 0)
-    const int ADJUSTED_WIDTH = precision > 0 ? WIDTH + precision + 1 : WIDTH;
+    const int ADJUSTED_WIDTH = precision > 0 ? WIDTH + PERIOD + precision : WIDTH;
 
     //process the stream of input numbers
     double streamInput;
