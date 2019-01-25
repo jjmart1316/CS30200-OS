@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
         precision = atoi(argv[1]);
     }
 
-    //adjustedWidth = width ( + precision + decimal point if precision is > 0)
+    //TOTAL_WIDTH = width ( + precision + decimal point if precision is > 0)
     const int TOTAL_WIDTH = precision > 0 ? WIDTH + PERIOD + precision : WIDTH;
 
     //process the stream of input numbers
