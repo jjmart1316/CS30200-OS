@@ -1,6 +1,5 @@
 /*
 Course: CS 30200
-Juan J Martinez
 Assignment: 2
 */
 
