@@ -1,5 +1,6 @@
 /*
 Course: CS 30200
+Juan J Martinez
 Assignment: 2
 */
 
@@ -9,7 +10,9 @@ Assignment: 2
 
 //Provides the user with a selection of 5 programs. returns the number of the program selected
 int userInput();
-//Prints error if createproces() fails
+//binds the executable program's address to a variable
+void programPath(char *arr, int num);
+//Prints error if createprocess fails
 void printError(char* functionName);
 
 int main(VOID) {
@@ -23,41 +26,35 @@ int main(VOID) {
     si.cb = sizeof si;
     si.lpTitle = "What is your command?";
     si.dwFlags = STARTF_USEFILLATTRIBUTE | STARTF_USEPOSITION;
-    si.dwFillAttribute = FOREGROUND_BLUE | BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY;
+    si.dwFillAttribute = FOREGROUND_BLUE | FOREGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY;
     _putenv("PROMPT=Speak to me$G");
 
     do {
         programNumber = userInput();
-        //0 == exit program
-        if ( programNumber != 0 ) {        
-            if ( programNumber == 1 ) {
-                sprintf( lpCommandLine, "%s\\notepad.exe", getenv("windir") );
-            } else if ( programNumber == 2 ) {
-                sprintf( lpCommandLine, "%s\\Windows NT\\Accessories\\wordpad.exe", getenv("ProgramFiles") );
-            } else if (programNumber == 3) {
-                sprintf(lpCommandLine, "%s", getenv("ComSpec") );
-            } else if (programNumber == 4) {
-                sprintf(lpCommandLine, "%s\\System32\\calc.exe", getenv("windir") );
-            } else if (programNumber == 5) {
-                sprintf(lpCommandLine, "%s\\explorer.exe", getenv("windir") );
-            }
-            if ( !CreateProcess( NULL, lpCommandLine, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi ) ) {
+        //if programNumber == 0, the program exits
+        if ( programNumber != 0 ) {
+
+            programPath( lpCommandLine, programNumber );
+            
+            if ( !CreateProcess( NULL, lpCommandLine, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi ) ) {    
                 printError("CreateProcess");
             } else {
+                //prints the process ID
                 printf("Started program %d with pid = %d\n\n", programNumber, (int)pi.dwProcessId);
+
+                //waits for CMD to exit and prints the termination status
                 if (programNumber == 3) {
                     printf("  waiting for program %d to terminate..\n", programNumber);
                     WaitForSingleObject(pi.hProcess, INFINITE);
                     DWORD exitCode = 0;
                     if ( GetExitCodeProcess(pi.hProcess, &exitCode) ) {
-                        printf("  Program %d exited with return value %d\n\n", programNumber, exitCode);
+                        printf("  Program %d exited with return value %ld\n\n", programNumber, exitCode);
                     }
                 }
                 CloseHandle( pi.hProcess );
                 CloseHandle( pi.hThread );
             }
         }
-        *lpCommandLine = 0;
     } while( programNumber != 0 );
     return 0;
 }
@@ -94,7 +91,22 @@ void printError(char* functionName) {
     // Display the string.
     fprintf(stderr, "\n%s failed on error %d: ", functionName, error_no);
     fprintf(stderr, (char*)lpMsgBuf);
-    // Free the buffer.
     LocalFree( lpMsgBuf );
-    //ExitProcess(1);  // terminate the program
-}//printError
+}
+
+void programPath(char *arr, int num) {
+    if (num == 1) {
+        sprintf(arr, "%s\\notepad.exe", getenv("windir"));
+    } else if (num == 2) {
+        sprintf(arr, "%s\\Windows NT\\Accessories\\wordpad.exe", getenv("ProgramFiles"));
+    } else if (num == 3) {
+        sprintf(arr, "%s", getenv("ComSpec"));
+    } else if (num == 4) {
+        sprintf(arr, "%s\\System32\\calc.exe", getenv("windir"));
+    } else if (num == 5) {
+        sprintf(arr, "%s\\explorer.exe", getenv("windir"));
+    } else {
+        //if user types a non-valid number, the binding variable receives a nul character
+        *arr = 0;
+    }
+}
